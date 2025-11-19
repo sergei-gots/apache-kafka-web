@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @Getter
 public class CreateProductRestModel {
 
-    String title;
-    BigDecimal price;
-    Integer quantity;
+    private String title;
+    private BigDecimal price;
+    private Integer quantity;
 
 }
