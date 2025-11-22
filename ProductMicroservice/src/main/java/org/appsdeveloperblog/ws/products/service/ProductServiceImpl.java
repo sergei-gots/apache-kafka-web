@@ -6,8 +6,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String createProduct(CreateProductRestModel productRestModel) {
+    public String createProduct(CreateProductRestModel productRestModel) throws Exception {
 
         String productId = UUID.randomUUID().toString();
 
@@ -32,17 +32,15 @@ public class ProductServiceImpl implements ProductService {
                 productRestModel.getQuantity()
         );
 
-        CompletableFuture<SendResult<String, ProductCreatedEvent>> future =
-            kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent);
+        log.info("*** Before publishing ProductCreatedEvent");
 
-        future.whenComplete((result, exception) -> {
+        SendResult<String, ProductCreatedEvent> result =
+            kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
 
-            if (exception != null) {
-                log.error("*** Failed to send message", exception);
-            } else {
-                log.info("*** Message sent successfully: {}", result.getRecordMetadata());
-            }
-        });
+        log.info("- Topic: {}", result.getRecordMetadata().topic());
+        log.info("- Partition: {}", result.getRecordMetadata().partition());
+        log.info("- Offset: {}", result.getRecordMetadata().offset());
+        log.info("- Timestamp: {}", Instant.ofEpochMilli(result.getRecordMetadata().timestamp()));
 
         log.info("*** Returning product id: {}", productId);
 
