@@ -1,18 +1,32 @@
 package org.appsdeveloperblog.ws.products.rest;
 
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.Instant;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
-@Setter
 public class ErrorMessage {
+
+    private static Throwable getRootCause(Throwable t) {
+        if (t.getCause() != null) {
+            return getRootCause(t.getCause());
+        } else {
+            return t;
+        }
+    }
+
+    String description;
+    String cause;
+    String resourcePath;
     Instant timestamp;
-    String message;
-    Exception e;
+
+    public ErrorMessage(Throwable t, String resourcePath) {
+
+        description = t.getMessage();
+        cause = getRootCause(t).getMessage();
+        this.resourcePath = resourcePath;
+        timestamp = Instant.now();
+    }
 }

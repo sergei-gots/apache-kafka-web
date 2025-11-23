@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-
 @Slf4j
 @RestController
 @RequestMapping("/products")    //http://localhost:<port>/products
@@ -31,7 +29,7 @@ public class ProductController {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorMessage(Instant.now(), "Failed to create a product", e)
+                    new ErrorMessage(e, "/products")
             );
         }
 
