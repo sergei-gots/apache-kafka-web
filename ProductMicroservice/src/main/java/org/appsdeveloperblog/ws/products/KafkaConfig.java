@@ -47,27 +47,27 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.request.timeout.ms}")
     String requestTimeout;
 
-    Map<String, Object> producerConfigs() {
+    Map<String, Object> producerProperties() {
 
-        Map<String, Object> config = new HashMap<>();
+        Map<String, Object> properties = new HashMap<>();
 
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
-        config.put(ProducerConfig.ACKS_CONFIG, acknowledgmentLevel);
-        config.put(ProducerConfig.RETRIES_CONFIG, retries);
-        config.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retryBackOff);
-        config.put(ProducerConfig.RETRY_BACKOFF_MAX_MS_CONFIG, retryBackOffMax);
-        config.put(ProducerConfig.LINGER_MS_CONFIG, linger);
-        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
-        config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
+        properties.put(ProducerConfig.ACKS_CONFIG, acknowledgmentLevel);
+        properties.put(ProducerConfig.RETRIES_CONFIG, retries);
+        properties.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retryBackOff);
+        properties.put(ProducerConfig.RETRY_BACKOFF_MAX_MS_CONFIG, retryBackOffMax);
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, linger);
+        properties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
+        properties.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
 
-        return config;
+        return properties;
     }
 
     @Bean
     ProducerFactory<String, ProductCreatedEvent> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+        return new DefaultKafkaProducerFactory<>(producerProperties());
     }
 
     @Bean
