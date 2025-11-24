@@ -30,7 +30,7 @@ public class KafkaConfig {
     String acknowledgmentLevel;
 
     @Value("${spring.kafka.producer.retries}")
-    String retries;
+    Integer retries;
 
     @Value("${spring.kafka.producer.properties.retry.backoff.ms}")
     String retryBackOff;
@@ -47,27 +47,36 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.request.timeout.ms}")
     String requestTimeout;
 
-    Map<String, Object> producerProperties() {
+    @Value("${spring.kafka.producer.properties.max.in.flight.requests.per.connection}")
+    Integer maxInFlightRequests;
 
-        Map<String, Object> properties = new HashMap<>();
+    @Value("${spring.kafka.producer.properties.enable.idempotence}")
+    Boolean idempotance;
 
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
-        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
-        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
-        properties.put(ProducerConfig.ACKS_CONFIG, acknowledgmentLevel);
-        properties.put(ProducerConfig.RETRIES_CONFIG, retries);
-        properties.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retryBackOff);
-        properties.put(ProducerConfig.RETRY_BACKOFF_MAX_MS_CONFIG, retryBackOffMax);
-        properties.put(ProducerConfig.LINGER_MS_CONFIG, linger);
-        properties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
-        properties.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
+    Map<String, Object> producerConfigs() {
 
-        return properties;
+        Map<String, Object> configs = new HashMap<>();
+
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
+
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
+        configs.put(ProducerConfig.ACKS_CONFIG, acknowledgmentLevel);
+        configs.put(ProducerConfig.RETRIES_CONFIG, retries);
+        configs.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, retryBackOff);
+        configs.put(ProducerConfig.RETRY_BACKOFF_MAX_MS_CONFIG, retryBackOffMax);
+        configs.put(ProducerConfig.LINGER_MS_CONFIG, linger);
+        configs.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
+        configs.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
+        configs.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, maxInFlightRequests);
+        configs.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotance);
+
+        return configs;
     }
 
     @Bean
     ProducerFactory<String, ProductCreatedEvent> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerProperties());
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
