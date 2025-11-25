@@ -1,0 +1,40 @@
+# ======================
+# IntelliJ IDEA
+# ======================
+.idea/
+*.iml
+*.iws
+workspace.xml
+modules.xml
+vcs.xml
+*.ipr
+
+# ======================
+# Maven
+# ======================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ======================
+# Logs
+# ======================
+*.log
+
+# ======================
+# OS files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Temporary files
+# ======================
+*.tmp
+*.bak
+*.swp
