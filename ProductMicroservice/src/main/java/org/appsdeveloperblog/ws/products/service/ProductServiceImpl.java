@@ -1,7 +1,9 @@
 package org.appsdeveloperblog.ws.products.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.products.rest.CreateProductRestModel;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,9 @@ import java.util.UUID;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate;
+    private final KafkaTemplate<@NotNull String, @NotNull ProductCreatedEvent> kafkaTemplate;
 
-    public ProductServiceImpl(KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate) {
+    public ProductServiceImpl(KafkaTemplate<@NotNull String, @NotNull ProductCreatedEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -34,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
         log.info("*** Before publishing ProductCreatedEvent");
 
-        SendResult<String, ProductCreatedEvent> result =
+        SendResult<@NotNull String, @NotNull ProductCreatedEvent> result =
             kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
 
         log.info("- Topic: {}", result.getRecordMetadata().topic());

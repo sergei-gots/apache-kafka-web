@@ -1,4 +1,4 @@
-package org.appsdeveloperblog.ws.products.service;
+package org.appsdeveloperblog.ws.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
