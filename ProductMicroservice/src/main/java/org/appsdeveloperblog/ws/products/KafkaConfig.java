@@ -3,6 +3,7 @@ package org.appsdeveloperblog.ws.products;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.appsdeveloperblog.ws.products.service.ProductCreatedEvent;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,6 +54,7 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.enable.idempotence}")
     Boolean idempotance;
 
+    @Bean
     Map<String, Object> producerConfigs() {
 
         Map<String, Object> configs = new HashMap<>();
@@ -75,12 +77,12 @@ public class KafkaConfig {
     }
 
     @Bean
-    ProducerFactory<String, ProductCreatedEvent> producerFactory() {
+    ProducerFactory<@NotNull String, @NotNull ProductCreatedEvent> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate() {
+    KafkaTemplate<@NotNull String, @NotNull ProductCreatedEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
