@@ -52,7 +52,7 @@ public class KafkaConfig {
     Integer maxInFlightRequests;
 
     @Value("${spring.kafka.producer.properties.enable.idempotence}")
-    Boolean idempotance;
+    Boolean idempotence;
 
     @Bean
     Map<String, Object> producerConfigs() {
@@ -71,7 +71,7 @@ public class KafkaConfig {
         configs.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeout);
         configs.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeout);
         configs.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, maxInFlightRequests);
-        configs.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotance);
+        configs.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, idempotence);
 
         return configs;
     }
