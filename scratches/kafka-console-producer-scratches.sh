@@ -21,8 +21,6 @@ echo '__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f
   #Example input:
   #__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f-4bb5-bc07-98fc8585b111;{"productId":"5f308922-ff7f-4bb5-bc07-98fc8585b111","title":"iPhone-26","quantity":5,"price":800}
 
-
-
 # Reset offset for the group product-created-events for the topic product-created-events-topic
 ./kafka-consumer-groups.sh \
   --bootstrap-server localhost:9092 \
@@ -30,4 +28,9 @@ echo '__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f
   --topic product-created-events-topic \
   --reset-offsets --to-latest --execute
 
+# To view all the messages in a Dead Letter Topic in Kafka
+ ./kafka-console-consumer.sh \
+ --bootstrap-server localhost:9092 \
+ --topic product-created-events-topic-dlt \
+ --property print.key=true
 
