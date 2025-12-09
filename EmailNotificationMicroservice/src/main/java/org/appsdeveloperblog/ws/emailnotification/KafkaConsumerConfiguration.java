@@ -1,11 +1,11 @@
 package org.appsdeveloperblog.ws.emailnotification;
 
-import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
+import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +21,7 @@ import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,15 +60,20 @@ public class KafkaConsumerConfiguration {
             KafkaTemplate<@NotNull String, @NotNull Object> kafkaTemplate
     ) {
 
-        ConcurrentKafkaListenerContainerFactory<@NotNull String, @NotNull Object> factory =
+        ConcurrentKafkaListenerContainerFactory<@NotNull String, @NotNull Object> listenerContainerFactory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory);
 
-        DeadLetterPublishingRecoverer deadLetterPublishingRecoverer = new DeadLetterPublishingRecoverer(kafkaTemplate);
+        DeadLetterPublishingRecoverer deadLetterPublishingRecoverer =
+                new DeadLetterPublishingRecoverer(kafkaTemplate);
+
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(deadLetterPublishingRecoverer);
-        factory.setCommonErrorHandler(errorHandler);
 
-        return factory;
+        errorHandler.addNotRetryableExceptions(NonRetryableException.class);
+
+        listenerContainerFactory.setConsumerFactory(consumerFactory);
+        listenerContainerFactory.setCommonErrorHandler(errorHandler);
+
+        return listenerContainerFactory;
     }
 
     @Bean
@@ -83,12 +89,10 @@ public class KafkaConsumerConfiguration {
         Map<String, Object> producerConfigs = new HashMap<>();
 
         producerConfigs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, environment.getProperty("spring.kafka.consumer.bootstrap-servers"));
-
         producerConfigs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,  StringSerializer.class);
-        producerConfigs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,  ByteArraySerializer.class);
+        producerConfigs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,  JacksonJsonSerializer.class);
 
         return new DefaultKafkaProducerFactory<>(producerConfigs);
     }
-
 
 }
