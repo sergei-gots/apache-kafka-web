@@ -3,8 +3,9 @@ package org.appsdeveloperblog.ws.emailnotification.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
-import org.appsdeveloperblog.ws.emailnotification.error.RetryeableException;
+import org.appsdeveloperblog.ws.emailnotification.error.RetryableException;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,9 @@ public class ProductCreatedEventHandler {
         log.info("Received a new event: {}", productCreatedEvent.getTitle());
 
         checkProductQuanity(productCreatedEvent);
-
         sendHttpRequest();
+
+        log.info("The event {} has been successfully handled", productCreatedEvent.getTitle());
     }
 
     private void checkProductQuanity(ProductCreatedEvent productCreatedEvent) {
@@ -40,9 +42,11 @@ public class ProductCreatedEventHandler {
         }
     }
 
+    private int sendCounter = 0;
+
     private void sendHttpRequest() {
 
-        String url = "http://localhost:8082";
+        String url = "http://localhost:8082/response/" + ((sendCounter++%2 == 0) ? "500" : "200");
 
         try {
             ResponseEntity<String> responseEntity =
@@ -50,11 +54,17 @@ public class ProductCreatedEventHandler {
         }
         catch (ResourceAccessException e) {
             log.warn("Cannot access resource {}", url);
-            throw new RetryeableException(e);
+            throw new RetryableException(e);
         }
         catch (HttpServerErrorException e ) {
-            log.warn("Caught http server exception", e);
-            throw new NonRetryableException(e);
+            HttpStatusCode httpStatusCode = e.getStatusCode();
+            if (httpStatusCode.is5xxServerError()) {
+                log.warn("Caught 5xx http server exception {}", httpStatusCode);
+                throw new RetryableException(e);
+            } else  {
+                log.warn("Caught not-a-5xx http server exception", e);
+                throw new NonRetryableException(e);
+            }
         }
         catch (Exception e ) {
             log.warn("Caught an exception", e);

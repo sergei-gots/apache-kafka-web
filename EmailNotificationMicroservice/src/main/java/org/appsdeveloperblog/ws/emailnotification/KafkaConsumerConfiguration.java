@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
-import org.appsdeveloperblog.ws.emailnotification.error.RetryeableException;
+import org.appsdeveloperblog.ws.emailnotification.error.RetryableException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -73,7 +73,7 @@ public class KafkaConsumerConfiguration {
                 new FixedBackOff(5_000L, 3L));
 
         errorHandler.addNotRetryableExceptions(NonRetryableException.class);
-        errorHandler.addRetryableExceptions(RetryeableException.class);
+        errorHandler.addRetryableExceptions(RetryableException.class);
 
         listenerContainerFactory.setConsumerFactory(consumerFactory);
         listenerContainerFactory.setCommonErrorHandler(errorHandler);
