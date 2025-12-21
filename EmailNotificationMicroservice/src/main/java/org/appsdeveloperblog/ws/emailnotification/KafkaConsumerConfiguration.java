@@ -6,6 +6,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
+import org.appsdeveloperblog.ws.emailnotification.error.RetryeableException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,9 +68,12 @@ public class KafkaConsumerConfiguration {
         DeadLetterPublishingRecoverer deadLetterPublishingRecoverer =
                 new DeadLetterPublishingRecoverer(kafkaTemplate);
 
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler(deadLetterPublishingRecoverer);
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(
+                deadLetterPublishingRecoverer,
+                new FixedBackOff(5_000L, 3L));
 
         errorHandler.addNotRetryableExceptions(NonRetryableException.class);
+        errorHandler.addRetryableExceptions(RetryeableException.class);
 
         listenerContainerFactory.setConsumerFactory(consumerFactory);
         listenerContainerFactory.setCommonErrorHandler(errorHandler);

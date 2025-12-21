@@ -20,6 +20,7 @@ echo '__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f
   --property headers.delimiter=';'
   #Example input:
   #__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f-4bb5-bc07-98fc8585b111;{"productId":"5f308922-ff7f-4bb5-bc07-98fc8585b111","title":"iPhone-26","quantity":5,"price":800}
+  #__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f-4bb5-bc07-98fc8585b112;{"productId":"5f308922-ff7f-4bb5-bc07-98fc8585b112","title":"iPhone-26","quantity":-1,"price":800}
 
 # Reset offset for the group product-created-events for the topic product-created-events-topic
 ./kafka-consumer-groups.sh \
@@ -32,5 +33,6 @@ echo '__TypeId__:org.appsdeveloperblog.ws.core.ProductCreatedEvent;5f308922-ff7f
  ./kafka-console-consumer.sh \
  --bootstrap-server localhost:9092 \
  --topic product-created-events-topic-dlt \
- --property print.key=true
+ --property print.key=true \
+ --from-beginning
 
