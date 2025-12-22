@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
 import org.appsdeveloperblog.ws.emailnotification.error.RetryableException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -49,17 +50,17 @@ public class ProductCreatedEventHandler {
         String url = "http://localhost:8082/response/" + ((sendCounter++%2 == 0) ? "500" : "200");
 
         try {
-            ResponseEntity<String> responseEntity =
+            ResponseEntity<@NotNull String> responseEntity =
                     restTemplate.exchange(url, HttpMethod.GET, null, String.class);
         }
         catch (ResourceAccessException e) {
-            log.warn("Cannot access resource {}", url);
+            log.warn("Cannot access resource {}", url, e);
             throw new RetryableException(e);
         }
         catch (HttpServerErrorException e ) {
             HttpStatusCode httpStatusCode = e.getStatusCode();
             if (httpStatusCode.is5xxServerError()) {
-                log.warn("Caught 5xx http server exception {}", httpStatusCode);
+                log.warn("Caught 5xx http server exception {}", httpStatusCode, e);
                 throw new RetryableException(e);
             } else  {
                 log.warn("Caught not-a-5xx http server exception", e);
