@@ -2,6 +2,7 @@
  ./kafka-console-consumer.sh \
  --bootstrap-server localhost:9092 \
  --topic product-created-events-topic \
+ --group product-created-events-topic-debug-console \
  --property print.key=true \
  --from-beginning
 
@@ -9,6 +10,7 @@
  ./kafka-console-consumer.sh \
  --bootstrap-server localhost:9092 \
  --topic product-created-events-topic-dlt \
+ --group product-created-events-topic-dlt-debug-console \
  --property print.key=true \
  --from-beginning
 

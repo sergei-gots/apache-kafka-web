@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
+@KafkaListener(topics = "${kafka.topic}")
 public class ProductCreatedEventHandler {
 
     private final RestTemplate restTemplate;
@@ -25,7 +27,7 @@ public class ProductCreatedEventHandler {
         this.restTemplate = restTemplate;
     }
 
-    @KafkaListener(topics = "product-created-events-topic")
+    @KafkaHandler
     public void handle(ProductCreatedEvent productCreatedEvent) {
 
         log.info("Received a new event: {}", productCreatedEvent.getTitle());
@@ -38,8 +40,9 @@ public class ProductCreatedEventHandler {
 
     private void checkProductQuantity(ProductCreatedEvent productCreatedEvent) {
 
-        if (productCreatedEvent.getQuantity() < 0) {
-            log.warn("Product quantity {} is less than 0. A non-retryable exception will be thrown.", productCreatedEvent.getQuantity());
+        Integer quantity =  productCreatedEvent.getQuantity();
+        if (quantity == null || quantity < 0) {
+            log.warn("Product quantity {} is null or less than 0. A non-retryable exception will be thrown.", quantity);
             throw new NonRetryableException("Product quantity is less than 0.");
         }
     }
