@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.appsdeveloperblog.ws</groupId>
-	<artifactId>EmailNotificationMicroservice</artifactId>
+	<artifactId>email-notification-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>EmailNotificationMicroservice</name>
 	<description>Email Notification Microservice</description>

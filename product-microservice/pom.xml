@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.appsdeveloperblog.ws</groupId>
-	<artifactId>ProductMicroservice</artifactId>
+	<artifactId>product-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ProductMicroservice</name>
 	<description>Web Server Kafka project for Spring Boot</description>

@@ -11,8 +11,8 @@
     <packaging>pom</packaging>  <!-- important: root project doesn't contain code -->
 
     <modules>
-        <module>EmailNotificationMicroservice</module>
-        <module>ProductMicroservice</module>
+        <module>email-notification-microservice</module>
+        <module>product-microservice</module>
     </modules>
 
     <dependencyManagement>
