@@ -1,5 +1,6 @@
 package org.appsdeveloperblog.ws.products;
 
+import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
@@ -83,6 +85,14 @@ public class KafkaConfig {
     @Bean
     KafkaTemplate<@NotNull String, @NotNull ProductCreatedEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public KafkaAdmin kafkaAdmin(@Value("${spring.kafka.producer.bootstrap-servers}") String bootstrapServers) {
+
+        Map<String, Object> configs = new HashMap<>();
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        return new KafkaAdmin(configs);
     }
 
     @Bean
