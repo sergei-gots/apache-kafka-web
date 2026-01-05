@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -28,9 +31,17 @@ public class ProductCreatedEventHandler {
     }
 
     @KafkaHandler
-    public void handle(ProductCreatedEvent productCreatedEvent) {
-
-        log.info("Received a new event: {}", productCreatedEvent.getTitle());
+    public void handle(
+            @Payload ProductCreatedEvent productCreatedEvent,
+            @Header("messageId") String messageId,
+            @Header(KafkaHeaders.RECEIVED_KEY) String messageKey
+    ) {
+        log.info("Received a new event: {} with productId: {}. messageId: {}, messageKey: {}",
+                productCreatedEvent.getTitle(),
+                productCreatedEvent.getProductId(),
+                messageId,
+                messageKey
+        );
 
         checkProductQuantity(productCreatedEvent);
         sendHttpRequest();
