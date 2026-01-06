@@ -26,12 +26,4 @@ public class AppKafkaConfig {
                 .build();
     }
 
-    @Bean
-    public NewTopic productCreatedEventsDlt(AppKafkaTopicsProperties topics) {
-        return TopicBuilder.name(topics.getProductCreatedEvents() + "-dlt")
-                .partitions(topics.getPartitions())
-                .replicas(topics.getReplicas())
-                .build();
-    }
-
 }
