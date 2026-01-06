@@ -1,10 +1,14 @@
 package org.appsdeveloperblog.ws.emailnotification.handler;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
 import org.appsdeveloperblog.ws.emailnotification.error.RetryableException;
+import org.appsdeveloperblog.ws.emailnotification.io.ProcessedEventEntity;
+import org.appsdeveloperblog.ws.emailnotification.io.ProcessedEventRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -25,11 +29,17 @@ import org.springframework.web.client.RestTemplate;
 public class ProductCreatedEventHandler {
 
     private final RestTemplate restTemplate;
+    private final ProcessedEventRepository processedEventRepository;
 
-    public  ProductCreatedEventHandler(RestTemplate restTemplate) {
+    public  ProductCreatedEventHandler(
+            RestTemplate restTemplate,
+            ProcessedEventRepository processedEventRepository
+    ) {
         this.restTemplate = restTemplate;
+        this.processedEventRepository = processedEventRepository;
     }
 
+    @Transactional
     @KafkaHandler
     public void handle(
             @Payload ProductCreatedEvent productCreatedEvent,
@@ -43,10 +53,32 @@ public class ProductCreatedEventHandler {
                 messageKey
         );
 
+        if(processedEventRepository.findByMessageId(messageId).isPresent()) {
+
+            log.warn("Message with id={} has already been processed - skipping", messageId);
+            return;
+        }
+
         checkProductQuantity(productCreatedEvent);
         sendHttpRequest();
+        save(productCreatedEvent, messageId);
 
         log.info("The event {} has been successfully handled", productCreatedEvent.getTitle());
+    }
+
+    private void save(ProductCreatedEvent productCreatedEvent, String messageId) {
+
+        ProcessedEventEntity processedEventEntity = new ProcessedEventEntity(
+                messageId,
+                productCreatedEvent.getProductId()
+        );
+
+        try {
+            processedEventRepository.save(processedEventEntity);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new NonRetryableException(e);
+        }
     }
 
     private void checkProductQuantity(ProductCreatedEvent productCreatedEvent) {
