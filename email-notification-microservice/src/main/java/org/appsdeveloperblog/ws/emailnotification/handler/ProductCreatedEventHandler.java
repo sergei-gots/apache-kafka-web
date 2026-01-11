@@ -94,7 +94,8 @@ public class ProductCreatedEventHandler {
 
     private void sendHttpRequest() {
 
-        String url = "http://localhost:8082/response/" + ((sendCounter++%2 == 0) ? "500" : "200");
+        //String url = "http://localhost:8082/response/" + ((sendCounter++%2 == 0) ? "500" : "200");
+        String url = "http://localhost:8082/response/200";
 
         try {
             ResponseEntity<@NotNull String> response =
