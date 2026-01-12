@@ -12,6 +12,7 @@ The project consists of set of modules:
 - email-notification-microservice  
 - mock-http-service
 - transfer-microservice
+- deposit-microservice
 - withdrawal-microservice
 
 The <code>core</code> module contains a code used in all the rest modules
@@ -32,6 +33,7 @@ contains module declarations:
         <module>product-microservice</module>
         <module>email-notification-microservice</module>
         <module>transfer-microservice</module>
+        <module>deposit-microservice</module>
         <module>withdrawal-microservice</module>
     </modules>
 

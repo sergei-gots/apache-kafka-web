@@ -23,6 +23,8 @@
         <module>product-microservice</module>
         <module>email-notification-microservice</module>
         <module>transfer-microservice</module>
+        <module>deposit-microservice</module>
+        <module>withdrawal-microservice</module>
     </modules>
 
     <dependencyManagement>
