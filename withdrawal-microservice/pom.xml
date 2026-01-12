@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-	<groupId>com.appsdeveloperblog.estore</groupId>
+	<groupId>org.appsdeveloperblog.estore</groupId>
 	<artifactId>withdrawal-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>WithdrawalMicroService</name>
