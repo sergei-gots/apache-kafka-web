@@ -2,7 +2,7 @@ package org.appsdeveloperblog.ws.products.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
+import org.appsdeveloperblog.ws.core.events.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.products.rest.CreateProductRestModel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

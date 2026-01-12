@@ -2,7 +2,7 @@ package org.appsdeveloperblog.ws.emailnotification.handler;
 
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
+import org.appsdeveloperblog.ws.core.events.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.core.error.NonRetryableException;
 import org.appsdeveloperblog.ws.core.error.RetryableException;
 import org.appsdeveloperblog.ws.emailnotification.io.ProcessedEventEntity;

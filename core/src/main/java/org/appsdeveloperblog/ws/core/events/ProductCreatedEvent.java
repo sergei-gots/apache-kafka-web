@@ -1,4 +1,4 @@
-package org.appsdeveloperblog.ws.core;
+package org.appsdeveloperblog.ws.core.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

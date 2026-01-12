@@ -1,6 +1,6 @@
 package org.appsdeveloperblog.ws.products.config;
 
-import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
+import org.appsdeveloperblog.ws.core.events.ProductCreatedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
