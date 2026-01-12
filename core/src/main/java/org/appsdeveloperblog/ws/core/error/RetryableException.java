@@ -1,4 +1,4 @@
-package org.appsdeveloperblog.ws.emailnotification.error;
+package org.appsdeveloperblog.ws.core.error;
 
 public class RetryableException extends RuntimeException{
 

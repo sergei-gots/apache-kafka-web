@@ -14,8 +14,8 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
-import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
-import org.appsdeveloperblog.ws.emailnotification.error.RetryableException;
+import org.appsdeveloperblog.ws.core.error.NonRetryableException;
+import org.appsdeveloperblog.ws.core.error.RetryableException;
 
 @Configuration
 @Import(KafkaTopicConfig.class)
