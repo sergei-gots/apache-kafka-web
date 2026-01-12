@@ -2,16 +2,13 @@ server:
   port: 0
 
 spring:
-
   kafka:
-
     consumer:
       bootstrap-servers: localhost:9092
       group-id: amount-withdrawal-event
-
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-
+      isolation-level: READ_COMMITTED
       properties:
         spring:
           json:
@@ -20,7 +17,6 @@ spring:
           deserializer:
             key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
             value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
-
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
