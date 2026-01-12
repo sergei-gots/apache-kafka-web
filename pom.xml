@@ -22,6 +22,7 @@
         <module>mock-http-service</module>
         <module>product-microservice</module>
         <module>email-notification-microservice</module>
+        <module>transfer-service</module>
     </modules>
 
 
