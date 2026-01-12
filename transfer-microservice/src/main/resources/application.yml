@@ -1,0 +1,24 @@
+server:
+  port: 0
+
+withdraw-money-topic: withdraw-money-topic
+deposit-money-topic: deposit-money-topic
+
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+
+      properties:
+
+        spring.json.trusted.packages: org.appsdeveloperblog.core.events
+
+        delivery.timeout.ms: 120000
+        linger.ms: 0
+        request.timeout.ms: 30000
+
+        max.in.flight.requests.per.connection: 5
+        enable.idempotence: true
