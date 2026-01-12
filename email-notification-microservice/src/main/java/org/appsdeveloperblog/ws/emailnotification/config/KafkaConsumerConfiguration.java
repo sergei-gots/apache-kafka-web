@@ -1,6 +1,5 @@
-package org.appsdeveloperblog.ws.emailnotification;
+package org.appsdeveloperblog.ws.emailnotification.config;
 
-import org.appsdeveloperblog.ws.core.AppKafkaConfig;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +18,7 @@ import org.appsdeveloperblog.ws.emailnotification.error.NonRetryableException;
 import org.appsdeveloperblog.ws.emailnotification.error.RetryableException;
 
 @Configuration
-@Import(AppKafkaConfig.class)
+@Import(KafkaTopicConfig.class)
 public class KafkaConsumerConfiguration {
 
     @Bean

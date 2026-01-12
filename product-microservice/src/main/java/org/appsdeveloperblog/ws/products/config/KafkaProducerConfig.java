@@ -1,6 +1,5 @@
-package org.appsdeveloperblog.ws.products;
+package org.appsdeveloperblog.ws.products.config;
 
-import org.appsdeveloperblog.ws.core.AppKafkaConfig;
 import org.appsdeveloperblog.ws.core.ProductCreatedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
@@ -12,7 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 @Configuration
-@Import(AppKafkaConfig.class)
+@Import(KafkaTopicConfig.class)
 public class KafkaProducerConfig {
 
     @Bean
