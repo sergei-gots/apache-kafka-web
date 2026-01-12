@@ -12,6 +12,7 @@ The project consists of set of modules:
 - email-notification-microservice  
 - mock-http-service
 - transfer-microservice
+- withdrawal-microservice
 
 The <code>core</code> module contains a code used in all the rest modules
 The <code>mock-http-service</code> is a tiny http service used to accept http requests sent
@@ -30,7 +31,8 @@ contains module declarations:
         <module>mock-http-service</module>
         <module>product-microservice</module>
         <module>email-notification-microservice</module>
-        <module>transfer-service</module>
+        <module>transfer-microservice</module>
+        <module>withdrawal-microservice</module>
     </modules>
 
 ### pom.xml in module
