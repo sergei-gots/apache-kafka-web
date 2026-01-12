@@ -24,9 +24,11 @@
 		<tag/>
 		<url/>
 	</scm>
+
 	<properties>
 		<java.version>${java.version}</java.version>
 	</properties>
+
 	<dependencies>
 
         <dependency>
