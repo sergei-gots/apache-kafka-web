@@ -16,4 +16,5 @@ public class PaymentsApplication {
 	RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
+
 }

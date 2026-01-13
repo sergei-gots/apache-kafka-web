@@ -1,25 +1,25 @@
 server:
-  port: 0
+  port: '0'
 
-withdraw-money-topic: withdraw-money-topic
-deposit-money-topic: deposit-money-topic
+withdraw-money-topic: 'withdraw-money-topic'
+deposit-money-topic: 'deposit-money-topic'
 
 logging.level:
-  org.springframework.kafka.transaction: TRACE
-  org.springframework.transaction: TRACE
+  org.springframework.kafka.transaction: 'TRACE'
+  org.springframework.transaction: 'TRACE'
 
 spring:
   kafka:
     producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
-      acks: all
-      transactional-id-prefix: transfer-service-${random.value}-
+      bootstrap-servers: 'localhost:9092'
+      key-serializer: 'org.apache.kafka.common.serialization.StringSerializer'
+      value-serializer: 'org.springframework.kafka.support.serializer.JacksonJsonSerializer'
+      acks: 'all'
+      transactional-id-prefix: 'transfer-microservice-'
       properties:
-        spring.json.trusted.packages: org.appsdeveloperblog.core.events
-        delivery.timeout.ms: 120000
-        linger.ms: 0
-        request.timeout.ms: 30000
-        max.in.flight.requests.per.connection: 5
-        enable.idempotence: true
+        spring.json.trusted.packages: 'org.appsdeveloperblog.core.events'
+        delivery.timeout.ms: '120000'
+        linger.ms: '0'
+        request.timeout.ms: '30000'
+        max.in.flight.requests.per.connection: '5'
+        enable.idempotence: 'true'

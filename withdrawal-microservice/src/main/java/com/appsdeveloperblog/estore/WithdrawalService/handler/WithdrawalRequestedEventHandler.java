@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.appsdeveloperblog.ws.core.events.WithdrawalRequestedEvent;
 
 @Component
-@KafkaListener(topics = "withdraw-money-topic", containerFactory = "kafkaListenerContainerFactory")
+@KafkaListener(topics = "${microservice.kafka.topic}", containerFactory = "kafkaListenerContainerFactory")
 public class WithdrawalRequestedEventHandler {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

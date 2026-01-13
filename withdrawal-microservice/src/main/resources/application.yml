@@ -1,22 +1,24 @@
 server:
-  port: 0
-
+  port: '0'
+microservice:
+  kafka:
+    topic: 'deposit-money-topic'
 spring:
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092
-      group-id: amount-withdrawal-event
-      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      isolation-level: READ_COMMITTED
+      bootstrap-servers: 'localhost:9092'
+      group-id: 'amount-withdrawal-event'
+      key-deserializer: 'org.springframework.kafka.support.serializer.ErrorHandlingDeserializer'
+      value-deserializer: 'org.springframework.kafka.support.serializer.ErrorHandlingDeserializer'
+      isolation-level: 'READ_COMMITTED'
       properties:
         spring:
           json:
-            trusted.packages: org.appsdeveloperblog.core.events
-            value.default.type: org.appsdeveloperblog.ws.core.events.ProductCreatedEvent
+            trusted.packages: 'org.appsdeveloperblog.core.events'
+            value.default.type: 'org.appsdeveloperblog.ws.core.events.ProductCreatedEvent'
           deserializer:
-            key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
-            value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+            key.delegate.class: 'org.apache.kafka.common.serialization.StringDeserializer'
+            value.delegate.class: 'org.springframework.kafka.support.serializer.JacksonJsonDeserializer'
     producer:
-      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: 'org.springframework.kafka.support.serializer.JacksonJsonSerializer'
+      key-serializer: 'org.apache.kafka.common.serialization.StringSerializer'

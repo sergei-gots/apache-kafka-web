@@ -1,13 +1,20 @@
 server:
-  port: 0
+  port: '0'
 
 spring.kafka:
   consumer:
-    bootstrap-servers=localhost: 9092
-    group-id: amount-deposit-event
-    isolation-level: READ_COMMITTED
-    properties.spring.json.trusted.packages: org.appsdeveloperblog.ws.core.events
+    bootstrap-servers: 'localhost:9092'
+    group-id: 'amount-deposit-event'
+    isolation-level: 'READ_COMMITTED'
+    key-deserializer: 'org.apache.kafka.common.serialization.StringDeserializer'
+    value-deserializer: 'org.springframework.kafka.support.serializer.JacksonJsonDeserializer'
+    properties:
+      spring.json.trusted.packages: 'org.appsdeveloperblog.ws.core.events'
+      spring.json.value.default.type: 'org.appsdeveloperblog.ws.core.events.DepositRequestedEvent'
   producer:
-    bootstrap-servers=localhost: 9092
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+    bootstrap-servers: 'localhost:9092'
+    key-serializer: 'org.apache.kafka.common.serialization.StringSerializer'
+    value-serializer: 'org.springframework.kafka.support.serializer.JacksonJsonSerializer'
+  listener:
+    ack-mode: 'record'
+    missing-topics-fatal: 'false'
