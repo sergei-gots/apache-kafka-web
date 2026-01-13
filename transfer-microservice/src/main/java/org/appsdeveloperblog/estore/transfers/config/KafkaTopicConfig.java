@@ -14,11 +14,11 @@ import org.springframework.kafka.core.KafkaAdmin;
 @EnableConfigurationProperties(KafkaTopicsProperties.class)
 public class KafkaTopicConfig {
 
-    @Value("${withdraw-money-topic}")
-    private String withdrawTopicName;
+    @Value("${withdrawal-events-topic}")
+    private String withdrawalEventsTopic;
 
-    @Value("${deposit-money-topic}")
-    private String depositTopicName;
+    @Value("${deposit-events-topic}")
+    private String depositEventsTopic;
 
     @Bean
     public KafkaAdmin kafkaAdmin(KafkaProperties properties) {
@@ -32,12 +32,12 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic withdrawTopic(KafkaTopicFactory kafkaTopicFactory) {
-        return kafkaTopicFactory.createTopic(withdrawTopicName);
+        return kafkaTopicFactory.createTopic(withdrawalEventsTopic);
     }
 
     @Bean
     public NewTopic depositTopic(KafkaTopicFactory kafkaTopicFactory) {
-        return kafkaTopicFactory.createTopic(depositTopicName);
+        return kafkaTopicFactory.createTopic(depositEventsTopic);
     }
 
 }

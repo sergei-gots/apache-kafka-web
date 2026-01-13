@@ -1,12 +1,13 @@
 server:
   port: '0'
 
-withdraw-money-topic: 'withdraw-money-topic'
-deposit-money-topic: 'deposit-money-topic'
+withdrawal-events-topic: 'withdrawal-events-topic'
+deposit-events-topic: 'deposit-events-topic'
 
 logging.level:
   org.springframework.kafka.transaction: 'TRACE'
   org.springframework.transaction: 'TRACE'
+  org.apache.kafka.clients.producer.internals.TransactionManager: 'TRACE'
 
 spring:
   kafka:

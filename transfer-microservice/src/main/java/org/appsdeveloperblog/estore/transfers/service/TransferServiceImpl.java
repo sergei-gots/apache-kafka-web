@@ -1,7 +1,7 @@
 package org.appsdeveloperblog.estore.transfers.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import org.appsdeveloperblog.estore.transfers.error.TransferServiceException;
-import org.appsdeveloperblog.estore.transfers.model.TransferRestModel;
+import org.appsdeveloperblog.ws.core.model.TransferRestModel;
 import org.appsdeveloperblog.ws.core.events.DepositRequestedEvent;
 import org.appsdeveloperblog.ws.core.events.WithdrawalRequestedEvent;
 
@@ -19,36 +19,39 @@ import org.appsdeveloperblog.ws.core.events.WithdrawalRequestedEvent;
 @Service
 public class TransferServiceImpl implements TransferService {
 
+    @Value("${withdrawal-events-topic}")
+    private String withdrawalEventsTopic;
+
+    @Value("${deposit-events-topic}")
+    private String depositEventsTopic;
+
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final Environment environment;
     private final RestTemplate restTemplate;
 
-    public TransferServiceImpl(KafkaTemplate<String, Object> kafkaTemplate, Environment environment,
+    public TransferServiceImpl(KafkaTemplate<String, Object> kafkaTemplate,
                                RestTemplate restTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-        this.environment = environment;
         this.restTemplate = restTemplate;
     }
 
     @Override
     @Transactional(transactionManager = "kafkaTransactionManager")
     public boolean transfer(TransferRestModel transferRestModel) {
-        WithdrawalRequestedEvent withdrawalEvent = new WithdrawalRequestedEvent(transferRestModel.getSenderId(),
-                transferRestModel.getRecipientId(), transferRestModel.getAmount());
-        DepositRequestedEvent depositEvent = new DepositRequestedEvent(transferRestModel.getSenderId(),
-                transferRestModel.getRecipientId(), transferRestModel.getAmount());
 
-        // Business logic that can cause an error
+        WithdrawalRequestedEvent withdrawalEvent = WithdrawalRequestedEvent.of(transferRestModel);
+        DepositRequestedEvent depositEvent = DepositRequestedEvent.of(transferRestModel);
+
+        // Inside this block there is a business logic that can cause an error
         try {
-            kafkaTemplate.send(environment.getProperty("withdraw-money-topic", "withdraw-money-topic"),
-                    withdrawalEvent);
-            log.info("Sent event to withdrawal topic.");
+            kafkaTemplate.send(withdrawalEventsTopic,  withdrawalEvent);
+            log.info("Sent event to {}.", withdrawalEventsTopic);
 
-            // Business logic that causes and error
+            kafkaTemplate.send(depositEventsTopic, depositEvent);
+            log.info("Sent event to {}.", depositEventsTopic);
+
+            //The business logic that can cause an error
             callRemoteServce();
-
-            kafkaTemplate.send(environment.getProperty("deposit-money-topic", "deposit-money-topic"), depositEvent);
-            log.info("Sent event to deposit topic");
 
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);

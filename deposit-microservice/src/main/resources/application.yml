@@ -1,11 +1,13 @@
 server:
   port: '0'
 
+deposit-events-topic: 'deposit-events-topic'
+
 spring.kafka:
   consumer:
     bootstrap-servers: 'localhost:9092'
-    group-id: 'amount-deposit-event'
-    isolation-level: 'READ_COMMITTED'
+    group-id: 'deposit-events-observer'
+    isolation-level: 'READ_UNCOMMITTED'
     key-deserializer: 'org.apache.kafka.common.serialization.StringDeserializer'
     value-deserializer: 'org.springframework.kafka.support.serializer.JacksonJsonDeserializer'
     properties:

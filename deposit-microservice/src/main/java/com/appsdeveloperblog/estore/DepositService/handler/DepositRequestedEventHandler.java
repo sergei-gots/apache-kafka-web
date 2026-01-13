@@ -10,7 +10,7 @@ import org.appsdeveloperblog.ws.core.events.DepositRequestedEvent;
 
 @Component
 @Slf4j
-@KafkaListener(topics = "deposit-money-topic", containerFactory = "kafkaListenerContainerFactory")
+@KafkaListener(topics = "${deposit-events-topic}", containerFactory = "kafkaListenerContainerFactory")
 public class DepositRequestedEventHandler {
 
 	@KafkaHandler

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.appsdeveloperblog.ws.core.model.TransferRestModel;
 
 import java.math.BigDecimal;
 
@@ -12,8 +13,17 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DepositRequestedEvent {
-    
+
     private String senderId;
     private String recipientId;
     private BigDecimal amount;
- }
+
+    public static DepositRequestedEvent of(TransferRestModel transferRestModel) {
+        return new DepositRequestedEvent(
+            transferRestModel.getSenderId(),
+            transferRestModel.getRecipientId(),
+            transferRestModel.getAmount()
+        );
+    }
+
+}

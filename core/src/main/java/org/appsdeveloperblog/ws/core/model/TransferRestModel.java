@@ -1,4 +1,4 @@
-package org.appsdeveloperblog.estore.transfers.model;
+package org.appsdeveloperblog.ws.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

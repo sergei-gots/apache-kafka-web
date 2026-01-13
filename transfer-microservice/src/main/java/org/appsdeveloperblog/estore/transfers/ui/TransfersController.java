@@ -3,7 +3,7 @@ package org.appsdeveloperblog.estore.transfers.ui;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.appsdeveloperblog.estore.transfers.model.TransferRestModel;
+import org.appsdeveloperblog.ws.core.model.TransferRestModel;
 import org.appsdeveloperblog.estore.transfers.service.TransferService;
 
 import org.springframework.web.bind.annotation.PostMapping;

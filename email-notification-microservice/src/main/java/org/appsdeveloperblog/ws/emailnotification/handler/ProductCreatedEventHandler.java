@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-@KafkaListener(topics = "${microservice.kafka.topic}")
+@KafkaListener(topics = "${product-created-events-topic}")
 public class ProductCreatedEventHandler {
 
     private final RestTemplate restTemplate;
