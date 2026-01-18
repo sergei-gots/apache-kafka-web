@@ -1,10 +1,9 @@
 package org.appsdeveloperblog.estore.transfers.service;
 
 import org.appsdeveloperblog.ws.core.model.TransferRestModel;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface TransferService {
-    boolean transferUsingTransactionalExample(TransferRestModel transferRestModel);
 
-    boolean transferUsingExecuteInTransactionExample(TransferRestModel transferRestModel);
+    boolean transfer(TransferRestModel transferRestModel);
+
 }

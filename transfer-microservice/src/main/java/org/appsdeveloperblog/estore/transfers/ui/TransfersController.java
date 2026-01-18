@@ -21,13 +21,9 @@ public class TransfersController {
         this.transferService = transferService;
     }
 
-    @PostMapping("/transactional")
+    @PostMapping
     public boolean transferTransactional(@RequestBody TransferRestModel transferRestModel) {
-        return transferService.transferUsingTransactionalExample(transferRestModel);
+        return transferService.transfer(transferRestModel);
     }
 
-    @PostMapping("/execute-in-transaction")
-    public boolean transferExecuteInTransaction(@RequestBody TransferRestModel transferRestModel) {
-        return transferService.transferUsingExecuteInTransactionExample(transferRestModel);
-    }
 }

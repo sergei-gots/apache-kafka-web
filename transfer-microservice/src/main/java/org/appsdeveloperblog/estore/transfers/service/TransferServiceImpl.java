@@ -38,7 +38,7 @@ public class TransferServiceImpl implements TransferService {
 
     @Override
     @Transactional(transactionManager = "kafkaTransactionManager")
-    public boolean transferUsingTransactionalExample(TransferRestModel transferRestModel) {
+    public boolean transfer(TransferRestModel transferRestModel) {
 
         WithdrawalRequestedEvent withdrawalEvent = WithdrawalRequestedEvent.of(transferRestModel);
         DepositRequestedEvent depositEvent = DepositRequestedEvent.of(transferRestModel);
@@ -54,19 +54,6 @@ public class TransferServiceImpl implements TransferService {
         return true;
     }
 
-    @Override
-    public boolean transferUsingExecuteInTransactionExample(TransferRestModel transferRestModel) {
-
-        WithdrawalRequestedEvent withdrawalEvent = WithdrawalRequestedEvent.of(transferRestModel);
-        DepositRequestedEvent depositEvent = DepositRequestedEvent.of(transferRestModel);
-
-        return Boolean.TRUE.equals(kafkaTemplate.executeInTransaction(t -> {
-
-            doTransfer(withdrawalEvent, depositEvent);
-
-            return true;
-        }));
-    }
 
     /**
      * Inside this method there is a business logic that is able to cause a RetryableException
