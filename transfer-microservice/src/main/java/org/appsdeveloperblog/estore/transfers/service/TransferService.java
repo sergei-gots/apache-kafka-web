@@ -6,6 +6,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TransferService {
     boolean transferUsingTransactionalExample(TransferRestModel transferRestModel);
 
-    @Transactional(transactionManager = "kafkaTransactionManager")
     boolean transferUsingExecuteInTransactionExample(TransferRestModel transferRestModel);
 }
