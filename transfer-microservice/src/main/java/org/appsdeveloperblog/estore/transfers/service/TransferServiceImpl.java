@@ -1,8 +1,11 @@
 package org.appsdeveloperblog.estore.transfers.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.appsdeveloperblog.estore.transfers.db.TransferEntity;
+import org.appsdeveloperblog.estore.transfers.db.TransferRepository;
 import org.appsdeveloperblog.ws.core.error.RetryableException;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,8 @@ import org.appsdeveloperblog.ws.core.model.TransferRestModel;
 import org.appsdeveloperblog.ws.core.events.DepositRequestedEvent;
 import org.appsdeveloperblog.ws.core.events.WithdrawalRequestedEvent;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 public class TransferServiceImpl implements TransferService {
@@ -29,22 +34,38 @@ public class TransferServiceImpl implements TransferService {
 
     private final KafkaTemplate<@NotNull String, @NotNull Object> kafkaTemplate;
     private final RestTemplate restTemplate;
+    private final TransferRepository transferRepository;
 
-    public TransferServiceImpl(KafkaTemplate<@NotNull String, @NotNull Object> kafkaTemplate,
-                               RestTemplate restTemplate) {
+    public TransferServiceImpl(KafkaTemplate<@NotNull String,
+                                       @NotNull Object> kafkaTemplate,
+                               RestTemplate restTemplate,
+                               TransferRepository transferRepository) {
         this.kafkaTemplate = kafkaTemplate;
         this.restTemplate = restTemplate;
+        this.transferRepository = transferRepository;
     }
 
     @Override
-    @Transactional(transactionManager = "kafkaTransactionManager")
+    @Transactional("transactionManager")
     public boolean transfer(TransferRestModel transferRestModel) {
 
         WithdrawalRequestedEvent withdrawalEvent = WithdrawalRequestedEvent.of(transferRestModel);
         DepositRequestedEvent depositEvent = DepositRequestedEvent.of(transferRestModel);
 
+        TransferEntity transferEntity = new TransferEntity();
+        BeanUtils.copyProperties(transferRestModel, transferEntity);
+        transferEntity.setId(UUID.randomUUID());
+
         try {
-            doTransfer(withdrawalEvent, depositEvent);
+            //Save record to a database table
+            transferRepository.save(transferEntity);
+
+            kafkaTemplate.executeInTransaction(t ->
+                    {
+                        doTransfer(withdrawalEvent, depositEvent);
+                        return true;
+                    }
+            );
 
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);

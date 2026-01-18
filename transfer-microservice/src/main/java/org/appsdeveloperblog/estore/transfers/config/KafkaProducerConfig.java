@@ -1,6 +1,8 @@
 package org.appsdeveloperblog.estore.transfers.config;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +12,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.transaction.KafkaTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Map;
@@ -36,9 +39,16 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(pf);
     }
 
-    @Bean
-    public KafkaTransactionManager<String, Object> kafkaTransactionManager(ProducerFactory<String, Object> pf) {
+    @Bean("kafkaTransactionManager")
+    public KafkaTransactionManager<@NotNull String, @NotNull Object> kafkaTransactionManager(
+            ProducerFactory<@NotNull String, @NotNull Object> pf
+    ) {
         return new KafkaTransactionManager<>(pf);
+    }
+
+    @Bean("transactionManager")
+    public JpaTransactionManager jpaTransactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
     }
 
 }
