@@ -60,19 +60,14 @@ public class TransferServiceImpl implements TransferService {
             //Save record to a database table
             transferRepository.save(transferEntity);
 
-            kafkaTemplate.executeInTransaction(t ->
-                    {
-                        doTransfer(withdrawalEvent, depositEvent);
-                        return true;
-                    }
-            );
+            doTransfer(withdrawalEvent, depositEvent);
+            return true;
 
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             throw new TransferServiceException(ex);
         }
 
-        return true;
     }
 
 
