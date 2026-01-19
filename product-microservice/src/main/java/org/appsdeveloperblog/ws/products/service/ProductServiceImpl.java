@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    @Value("${microservice.kafka.topic}")
+    @Value("${product-created-events-topic}")
     String kafkaTopic;
 
     private final KafkaTemplate<@NotNull String, @NotNull ProductCreatedEvent> kafkaTemplate;
