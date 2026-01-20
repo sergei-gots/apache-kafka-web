@@ -1,0 +1,10 @@
+product-created-events-topic: product-created-events-topic
+
+spring:
+  kafka:
+    consumer:
+      group-id: product-created-events
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "org.appsdeveloperblog.ws.core.model"
+
