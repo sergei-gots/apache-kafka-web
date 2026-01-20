@@ -21,6 +21,12 @@ class ProductServiceImplIT {
     @Test
     void givenValidData_whenCreateProduct_thenKafkaMessageIsSent() {
 
+        //Arrange
+
+        //Act
+
+        //Assert
+
     }
 
 }
