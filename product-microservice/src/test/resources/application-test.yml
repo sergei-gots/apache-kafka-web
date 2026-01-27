@@ -1,5 +1,3 @@
-product-created-events-topic: product-created-events-topic
-
 spring:
   kafka:
     consumer:
