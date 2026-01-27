@@ -6,5 +6,5 @@ spring:
       group-id: product-created-events
       auto-offset-reset: earliest
       properties:
-        spring.json.trusted.packages: "org.appsdeveloperblog.ws.core.model"
+        spring.json.trusted.packages: "org.appsdeveloperblog.ws.core.events"
 

@@ -5,6 +5,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.appsdeveloperblog.ws.core.events.ProductCreatedEvent;
 import org.appsdeveloperblog.ws.products.rest.CreateProductRestModel;
+import org.awaitility.Awaitility;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,6 +30,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 //Consider TestContainers as an alternative to @EmbeddedKafka
 //Consider using partitions = 1 with no other options
@@ -72,8 +76,13 @@ class ProductServiceImplIT {
         );
 
         records = new LinkedBlockingQueue<>();
+
         messageListenerContainer.setupMessageListener(
-                (MessageListener<@NotNull String, @NotNull ProductCreatedEvent>) records::add
+                //Here is an implementation of @FunctionalInterface MessageListener<T> :
+                (MessageListener<@NotNull String, @NotNull ProductCreatedEvent>)
+                //This is the body of the method GenericMessageListener<T>.onMessage(T message):
+                        //"WHEN the message is arrived THEN add it to the records' queue"
+                        records::add
         );
 
         messageListenerContainer.start();
@@ -102,6 +111,15 @@ class ProductServiceImplIT {
         productService.createProduct(createProductRestModel);
 
         //Assert
+        ConsumerRecord<String, ProductCreatedEvent> message =
+                Awaitility.await()
+                        .atMost(101, TimeUnit.MILLISECONDS)
+                        .until(() -> this.records.poll(), Objects::nonNull);
+
+        ProductCreatedEvent productCreatedEvent = message.value();
+        assertThat(productCreatedEvent.getTitle()).isEqualTo(title);
+        assertThat(productCreatedEvent.getPrice()).isEqualTo(price);
+        assertThat(productCreatedEvent.getQuantity()).isEqualTo(quantity);
 
     }
 
