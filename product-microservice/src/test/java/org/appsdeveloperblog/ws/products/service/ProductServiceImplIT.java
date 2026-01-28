@@ -34,6 +34,13 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ *  To run this integration test separately ('-Dit.test') use 'failsafe' ('verify') plugin:
+ *  This test as IT (integration test) must be run with 'failsafe' plugin (stage 'verify').
+ *  Use the next command using Maven Wrapper (./mvnw)
+ *  ('-X' specifies DEBUG MODE output):
+ *      <code>./mvnw clean verify -Dit.test=org.appsdeveloperblog.ws.products.service.ProductServiceImplIT -X</code>
+ */
 //Consider TestContainers as an alternative to @EmbeddedKafka
 //Consider using partitions = 1 with no other options
 @EmbeddedKafka(partitions = 1, // partitions = 3, count = 3,
