@@ -1,6 +1,11 @@
-# Apache Kafka study project
+# Apache Kafka workout project
 
-According to the course 'Apache Kafka for Spring Boot microservices'
+This project is inspired by the course **"Apache Kafka for Spring Boot Microservices"**,  
+but rebuilt on the latest stable versions: **Spring Boot 4.0** + **Spring Framework 7.0** (as of early 2026).
+
+It uses up-to-date dependencies, including the modern Kafka library stack (as of December 2025).
+
+Special attention is given to clean, high-level Kafka configuration using `@Configuration` classes and modern Spring Boot best practices.
 https://www.udemy.com/course/apache-kafka-for-spring-boot-microservices/
 
 ## Project structure
