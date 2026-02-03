@@ -44,7 +44,10 @@
         <!-- Active 'plugins' section: will be applied to all module pom.xml -->
         <plugins>
             <plugin>
-                <!-- Integration Tests: -->
+                <!-- Integration Tests: failsafe plugin.
+                    use the following cmd:
+                          ./mvnw clean verify
+                -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.5.4</version>
