@@ -90,7 +90,7 @@ public class ProductCreatedEventHandler {
         }
     }
 
-    private int sendCounter = 0;
+    //private int sendCounter = 0;
 
     private void sendHttpRequest() {
 
